@@ -1,7 +1,7 @@
 # Face Recognition Attendance System
 A smart attendance system using face recognition to log employees’ arrival and departure times automatically.
 
-<img width="1536" height="1024" alt="ChatGPT Image Oct 11, 2025, 09_54_50 PM" src="https://github.com/user-attachments/assets/80cd2f6b-6f4b-48e8-b3a4-1ca115f749de" />
+<img width="1536" height="1024" alt="Face recognition" src="https://github.com/user-attachments/assets/9f685ff5-ccc1-4d96-81a9-3e5949a69ec4" />
 
 ---
 
