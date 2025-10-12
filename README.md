@@ -1,6 +1,6 @@
 # 💰 Personal Finance & Expense Tracker
 
-<img width="1024" height="904" alt="Personal Financial" src="https://github.com/user-attachments/assets/0fa17ccc-7297-4c83-bd2c-db04aab8f692" />
+<img width="1024" height="841" alt="Personal finance (3)" src="https://github.com/user-attachments/assets/e66d3238-9297-4a52-878c-c4fbd722d503" />
 
 ---
 
