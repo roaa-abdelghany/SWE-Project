@@ -1,6 +1,4 @@
-# 💰 Personal Finance & Expense Tracker
-
-<img width="1024" height="841" alt="Personal finance (3)" src="https://github.com/user-attachments/assets/e66d3238-9297-4a52-878c-c4fbd722d503" />
+# Cosmetics Store
 
 ---
 
