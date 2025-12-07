@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>Checkout</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Checkout.css') }}">
+</head>
+<body>
+    <h1>Checkout</h1>
+    <h2>your cart items:</h2>
+    <ul>
+        {% for item in items %}
+          <li>{{ item.name }} — {{ item.quantity }} × {{ item.price }} EGP</li>
+        {% endfor %}
+    </ul>
+    <h3>shipping details</h3>
+    <form action="/checkout/{{ user_id }}" method="post">
+
+    <label>Shipping Address:</label><br>
+    <input type="text" name="shipping_address"><br><br>
+
+    <label>Phone Number:</label><br>
+    <input type="text" name="phone_number"><br><br>
+
+    <label>Payment Method:</label><br>
+    <select name="payment_method">
+        <option value="cash">Cash</option>
+        <option value="credit">Credit Card</option>
+    </select><br><br>
+
+    <button type="submit">Confirm Order</button>
+
+</form>
+</body>
+</html>

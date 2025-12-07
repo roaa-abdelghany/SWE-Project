@@ -1,0 +1,16 @@
+product_id,name,category,price,stock,rank,description,image
+1,Eye Cream,Skin Care,350,15,4.5,An under-eye cream to moisturize and avoid eye puffiness,eye_cream.jpg
+2,Three Ships,Skin Care,230,30,4.1,A facial foaming cleanser for acne prone skin,Three_Ships.jpg
+3,New York 3D,MakeUp,340,35,4.4,A full coverage + correcting concealer that is water based,New_York_3D.jpg
+4,Fenty Beauty,MakeUp,560,40,3.9,An instant brightening + blurring powder,Fenty_Beauty.jpg
+5,ILIA,MakeUp,650,30,4.5,Black Light weight Mascara for tall + lifted eyelashes,ILIA.jpg
+6,Tarte,MakeUp,250,15,5,Creamy + matte lipliner with hyaluronic acid and vitamin E,Tarte.jpg
+7,Lib Glow Oil,MakeUp,265,40,4,Nourishing and hydrating lip oil for a high shine finish,Lib_Glow_Oil.jpg
+8,Golden Belly Serum,Skin Care,640,45,3.8,Body oil for a hydrating and nourishing look,Golden_Belly_Serum.jpg
+9,Alder New York,Skin Care,360,30,5,An exfoliating mud mask for a smooth skin look,Alder_New_York.jpg
+10,Body Lotion,Skin Care,400,55,4.8,Shea better sensitive skin body lotion 48-Hour Moisture Skin Care for Dry Skin,Body_Lotion.jpg
+11,Hand Cream,Skin Care,250,30,4.9,A moisturizing hand cream for a smooth and hydrating finish,Hand_Cream.jpg
+12,The_Rose_Oil,Skin Care,360,20,5,Hydrating oil for healthy looking cuticles,The_Rose_Oil.jpg
+13,Glow recipe,Skin Care,400,12,5,A Cleansing make-up removing balm with papaya,Glow_recipe.jpg
+14,ILIA 1,MakeUp,300,44,4.7,Clean line liquid black eyeliner,ILIA_1.jpg
+15,Primer Infused Blush,MakeUp,467,35,3.8,Matte powder blush for long-lasting wear,Primer_Infused_Blush.jpg
