@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - GLOWING</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="top-banner">
+    </div>
+    <header class="main-nav">
+        <div class="logo">GLOWING</div>
+
+        <nav class="links">
+            <a href="/">HOME</a>
+            <a href="/products">SHOP</a>
+        </nav>
+
+        <div class="icons">
+            <i class="far fa-heart"></i>
+
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">{{ cart_items|length }}</span>
+            </div>
+
+            <a href="#" class="customer-link">Customer <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <h1>SHOPPING CART</h1>
+
+        <div class="cart-layout">
+
+            <div class="products-section">
+
+                {% for item in cart_items %}
+                <div class="cart-item">
+
+                    <div class="item-image">
+                        <img src="{{ url_for('static', filename='images/' ~ item.image) }}" alt="">
+                    </div>
+
+                    <div class="item-details">
+                        <h3 class="item-name">{{ item.name }}</h3>
+                        <p class="item-category">{{ item.category|upper }}</p>
+                        <p class="item-description">{{ item.description }}</p>
+
+                        <div class="quantity-control">
+                            <form method="POST" action="/cart/update/{{ item.product_id }}">
+                                <button name="action" value="decrease">−</button>
+                                <input type="text" value="{{ item.quantity }}" readonly>
+                                <button name="action" value="increase">+</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="item-actions">
+                        <span class="item-price">${{ "%.2f"|format(item.price) }}</span>
+
+                        <form method="POST" action="/cart/delete/{{ item.product_id }}">
+                            <button class="delete-btn">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+                {% endfor %}
+
+                {% if cart_items|length == 0 %}
+                <p class="empty-cart">Your cart is empty</p>
+                {% endif %}
+
+            </div>
+
+            <div class="summary-section">
+
+                <div class="summary-box">
+
+                    <h2>ORDER SUMMARY</h2>
+
+                    <div class="summary-line">
+                        <span>Subtotal ({{ cart_items|length }} items)</span>
+                        <span>{{ "%.2f"|format(subtotal) }}</span>
+                    </div>
+
+                    <div class="summary-line total-line">
+                        <span>Total</span>
+                        <span>{{ "%.2f"|format(total) }}</span>
+                    </div>
+
+                    <a href="/checkout">
+                        <button class="btn btn-checkout">PROCEED TO CHECKOUT</button>
+                    </a>
+
+                    
+                    <a href="/" class="btn btn-continue-shopping">CONTINUE SHOPPING</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
