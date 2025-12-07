@@ -1,33 +1,68 @@
-<html>
 <head>
-    <title>Checkout</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chcekout</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='Checkout.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <h1>Checkout</h1>
-    <h2>your cart items:</h2>
-    <ul>
-        {% for item in items %}
-          <li>{{ item.name }} — {{ item.quantity }} × {{ item.price }} EGP</li>
-        {% endfor %}
-    </ul>
-    <h3>shipping details</h3>
-    <form action="/checkout/{{ user_id }}" method="post">
 
-    <label>Shipping Address:</label><br>
-    <input type="text" name="shipping_address"><br><br>
+<div class="container">
+    <div class="left-side">
 
-    <label>Phone Number:</label><br>
-    <input type="text" name="phone_number"><br><br>
+        <h2>Checkout</h2>
+        <div class="box">
+            <h3> Shipping Address</h3>
 
-    <label>Payment Method:</label><br>
-    <select name="payment_method">
-        <option value="cash">Cash</option>
-        <option value="credit">Credit Card</option>
-    </select><br><br>
+            <form action="/checkout/{{ user_id }}" method="POST">
 
-    <button type="submit">Confirm Order</button>
+                <label>Full Address</label>
+                <textarea name="shipping_address" required></textarea>
 
-</form>
+                <label>Phone Number</label>
+                <input type="text" name="phone_number" required>
+
+                <h3>Payment Method</h3>
+
+                <div class="payment-box">
+                    <label>
+                        <input type="radio" name="payment_method" value="card" required>
+                        Credit / Debit Card
+                    </label>
+
+                    <label>
+                        <input type="radio" name="payment_method" value="cash" required>
+                        Cash on Delivery
+                    </label>
+                </div>
+
+                <button type="submit" class="place-order">Place Order</button>
+
+            </form>
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE: ORDER SUMMARY -->
+    <div class="summary-box">
+        <h3>Order Summary</h3>
+
+        <ul class="item-list">
+            {% for item in items %}
+            <li>
+                <span>{{ item.product_name }}</span>
+                <span>{{ item.quantity }} × {{ item.price }} EGP</span>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <hr>
+
+        <p><strong>Subtotal:</strong> {{ subtotal if subtotal else "" }} EGP</p>
+        <p><strong>Shipping:</strong> Free</p>
+
+    </div>
+</div>
+
 </body>
 </html>

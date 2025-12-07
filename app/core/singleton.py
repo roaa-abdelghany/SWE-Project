@@ -3,10 +3,10 @@ import csv
 class FileManager:
     _instance = None
 
-    def __new__(cls):
+    def _new_(cls):
         if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance.file_path = "data/Cart.csv"
+            cls.instance = super().new_(cls)
+            cls._instance.file_path = "data/Products.csv"
         return cls._instance
 
     def read_csv(self, path=None):
