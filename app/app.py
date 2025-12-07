@@ -1,10 +1,14 @@
 from flask import Flask
-from controllers.sign in_controller import sign in_bp
+# from controllers.cart_controller import cart_bp
+from controllers.auth_controller import auth_bp
 
-app = Flask(_name_)
-app.register_blueprint(sign in_bp) 
+app = Flask(__name__)
+# app.register_blueprint(cart_bp) 
+app.register_blueprint(auth_bp) 
 
-if _name_ == "_main_":
+
+if __name__ == "__main__":
     app.run(debug=True)
+    
     
     

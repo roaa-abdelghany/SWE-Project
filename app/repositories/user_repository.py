@@ -1,6 +1,6 @@
 import csv
 import os
-from models import User
+from models.user import User
 
 USERS_FILE = "users.csv"
 

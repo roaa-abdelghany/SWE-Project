@@ -1,31 +1,43 @@
-import cgi
-from repository import UserRepository
-from models import User
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from repositories.user_repository import UserRepository
+from models.user import User 
 
-print("Content-Type: text/html\n")
+auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
-form = cgi.FieldStorage()
-action = form.getvalue("action")
+@auth_bp.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        fullname = request.form.get("fullname")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        confirm = request.form.get("confirm_password")
 
-if action == "register":
-    fullname = form.getvalue("fullname")
-    email = form.getvalue("email")
-    password = form.getvalue("password")
-    confirm = form.getvalue("confirm_password")
+        if password != confirm:
+            flash("Passwords do not match!", "error")
+            return redirect(url_for("auth.register"))
 
-    if password != confirm:
-        print("<h3>Passwords do not match!</h3>")
-    else:
         user = User(fullname, email, password)
         UserRepository.add_user(user)
-        print("<h3>Account created! <a href='signin.html'>Sign in</a></h3>")
 
-elif action == "login":
-    email = form.getvalue("email")
-    password = form.getvalue("password")
+        flash("Account created successfully!", "success")
+        return redirect(url_for("auth.login"))
 
-    user = UserRepository.find_user_by_email_and_password(email, password)
-    if user:
-        print(f"<h3>Login successful! Welcome, {user.fullname}.</h3>")
-    else:
-        print("<h3>Invalid email or password!</h3>")
+    return render_template("register.html")
+
+
+@auth_bp.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        user = UserRepository.find_user_by_email_and_password(email, password)
+
+        if user:
+            flash(f"Welcome, {user.fullname}!", "success")
+            return redirect(url_for("cart.cart_page"))  # example redirect
+        else:
+            flash("Invalid email or password!", "error")
+            return redirect(url_for("auth.login"))
+
+    return render_template("login.html")
