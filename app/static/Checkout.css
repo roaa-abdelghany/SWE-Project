@@ -25,12 +25,11 @@ body {
     margin-left: 25px;
     font-weight: 500;
     font-size: 0.95rem;
-    /* Adding hover feedback to navigation links */
     transition: color 0.2s;
 }
 
 .navbar nav a:hover {
-    color: #007047; /* Subtle color change on hover */
+    color: #007047; 
 }
 
 .nav-icons {

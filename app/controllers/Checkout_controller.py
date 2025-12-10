@@ -7,17 +7,10 @@ checkout_bp = Blueprint('checkout', __name__, url_prefix='/checkout')
 @checkout_bp.route("/<int:user_id>", methods=["GET"])
 def show_checkout_page(user_id):
     items = CartRepository.get_by_user(user_id)
-    subtotal = sum(item.price * item.quantity for item in items)
-    shipping_fee = 0 if (subtotal >= 100 or subtotal==0) else 50
-    total = subtotal + shipping_fee
+    Checkout= Checkout("", "", "", items)
+    order_summary = Checkout.order_summary()
     return render_template(
-        "checkout.html",
-        items=items,
-        user_id=user_id,
-        subtotal=subtotal,
-        shipping_fee=shipping_fee,
-        total=total
-    )
+        "checkout.html", items=items, user_id=user_id,subtotal=order_summary["subtotal"],shipping_fee=order_summary["shipping_fee"],total=order_summary["total"])
 
 @checkout_bp.route("/<int:user_id>", methods=["POST"])
 def process_checkout(user_id):

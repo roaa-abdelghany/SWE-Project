@@ -34,7 +34,7 @@
                     <h3 class="section-header">
                         <span class="icon-circle">2</span> Phone Number
                     </h3>
-                    <label for="phone" class="form-label">Contact Phone Number</label>
+                    <label for="phone" class="form-label">Phone Number</label>
                     <input type="tel" id="phone" name="phone_number" placeholder="010...." class="text-input full-width" required>
                 </section>
 
@@ -110,7 +110,6 @@
                     <h3>Total</h3>
                     <h3>{{ "%.2f"|format(total|default(0)) }}EGP</h3>
                 </div>
-
                 <button type="submit" class="place-order-button">Place Order</button>
             </aside>
 
@@ -127,24 +126,16 @@
             const codOption = document.querySelector('.cod-option');
 
             function updatePaymentSelection() {
-                // Toggle 'selected' class for border highlight
                 cardOption.classList.toggle('selected', cardRadio.checked);
                 codOption.classList.toggle('selected', codRadio.checked);
-
-                // Show/hide card details input fields
                 cardDetails.style.display = cardRadio.checked ? 'block' : 'none';
-                
-                // Set 'required' attribute dynamically
                 const cardInputs = cardDetails.querySelectorAll('input');
                 cardInputs.forEach(input => {
                     input.required = cardRadio.checked;
                 });
             }
-
             cardRadio.addEventListener('change', updatePaymentSelection);
             codRadio.addEventListener('change', updatePaymentSelection);
-
-            // Initial call
             updatePaymentSelection();
         });
     </script>
