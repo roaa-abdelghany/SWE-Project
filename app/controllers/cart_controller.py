@@ -31,7 +31,6 @@ def cart_page():
     cart_items, cart_total = read_cart()
     subtotal = cart_total
     total = round(subtotal)
-    return render_template("cart.html",
-                           cart_items=cart_items,
+    return render_template("cart.html", cart_items=cart_items,
                            subtotal=subtotal,
                            total=total)

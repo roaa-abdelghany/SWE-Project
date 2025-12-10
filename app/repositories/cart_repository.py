@@ -2,7 +2,7 @@ from models.cart import CartItem
 from core.file_singleton import FileManager
 
 class CartRepository:
-    def _init_(self):
+    def __init__(self):
         self.file = FileManager()
         self.path = "data/Cart_items.csv"
         
