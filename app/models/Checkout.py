@@ -6,7 +6,7 @@ class Checkout:
         self.items = items
     def order_summary(self):
         subtotal = sum(item.price * item.quantity for item in self.items)
-        shipping_fee = 50 if subtotal > 100 else 0
+        shipping_fee = 50 if subtotal < 100 else 0
         total = subtotal + shipping_fee
         return{
             "Shipping Address": self.shipping_address,
