@@ -55,7 +55,7 @@ The system uses multiple CSV files to store data:
 
 ## 🛠️ Technologies Used
 - **Backend:** Python (Flask)  
-- **Frontend:** HTML, CSS, JavaScript  
+- **Frontend:** HTML, CSS
 - **Data Storage:** CSV files  
 - **Diagrams & UI Mockups:** Draw.io  
 - **Charts (Admin Analytics):** Chart.js  
