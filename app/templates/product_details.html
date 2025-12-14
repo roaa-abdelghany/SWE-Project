@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} | GLOWING</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='products.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">GLOWING</div>
+    <nav>
+        <a href="{{ url_for('home') }}">HOME</a>
+    </nav>
+    <div class="header-icons">
+        <i class="far fa-heart"></i> 
+        
+        <a href="{{ url_for('cart.cart_page', user_id=1) }}" class="cart-icon-link">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">{{ cart_count | default(0) }}</span> 
+        </a>
+        
+        <a href="/customer" class="customer-link">
+             <i class="fas fa-user"></i>
+             Customer
+        </a>
+    </div>
+</header>
+
+<div class="main-content-container">
+
+    <div class="product-container">
+
+        <div class="left">
+
+            <img src="{{ url_for('static', filename='images/' + product.image) }}"
+                     alt="{{ product.name }}"
+                     class="product-image">
+        </div>
+
+        <div class="right">
+            <h2 class="name">{{ product.name }}</h2>
+
+            <div class="rating">
+                {% set full_stars = product.rank | round | int %}
+                {% for i in range(full_stars) %}
+                    <i class="fas fa-star full-star"></i>
+                {% endfor %}
+                {% for i in range(5 - full_stars) %}
+                    <i class="far fa-star empty-star"></i>
+                {% endfor %}
+                
+                <span class="rank">{{ product.rank }} (0 reviews)</span>
+            </div>
+
+            <h3 class="price">{{ '%.2f'|format(product.price) }} EGP</h3>
+
+            <p class="desc">{{ product.description }}</p>
+
+            <div class="info-card">
+                <p><strong>Category:</strong> {{ product.category }}</p>
+                <p><strong>Stock:</strong> {{ product.stock }} available</p>
+            </div>
+
+            <label for="qty-input" class="qty-label">Quantity</label>
+            
+            <div class="quantity-box">
+                <button type="button" class="qty-control-btn minus-btn" data-input-id="qty-input">-</button>
+                <input type="number" 
+                       id="qty-input"
+                       name="quantity" 
+                       value="1" 
+                       min="1" 
+                       max="{{ product.stock }}"
+                       class="qty-input-main"
+                       readonly>
+                <button type="button" class="qty-control-btn plus-btn" data-input-id="qty-input">+</button> 
+            </div>
+
+            <div class="product-actions-buttons">
+                <form action="{{ url_for('cart.add_to_cart') }}" method="POST" class="add-to-cart-form">
+                    <input type="hidden" name="user_id" value="1">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <input type="hidden" name="quantity" id="form-qty-input" value="1">
+                    
+                    <button class="add-btn" type="submit">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                </form>
+
+                <button class="fav-btn"><i class="far fa-heart"></i> Add to Wishlist</button>
+            </div>
+            <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const plusButtons = document.querySelectorAll('.plus-btn');
+        const minusButtons = document.querySelectorAll('.minus-btn');
+        const mainQtyInput = document.getElementById('qty-input');
+        const formQtyInput = document.getElementById('form-qty-input');
+
+        function updateQuantity(delta) {
+            let currentValue = mainQtyInput.valueAsNumber || Number(mainQtyInput.value);
+            const max = Number(mainQtyInput.max);
+            const min = Number(mainQtyInput.min);
+
+            let newValue = currentValue + delta;
+
+            if (newValue >= min && newValue <= max) {
+                mainQtyInput.value = newValue;
+                formQtyInput.value = newValue; 
+            }
+        }
+        
+        plusButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                updateQuantity(1);
+            });
+        });
+
+        minusButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                updateQuantity(-1);
+            });
+        });
+
+        if (formQtyInput) {
+            formQtyInput.value = mainQtyInput.value;
+        }
+    });
+</script>
+
+        </div>
+
+    </div>
+
+    <div class="reviews-section">
+        <h3>Customer Reviews</h3>
+        <p class="no-reviews">No reviews yet. Be the first to review this product!</p>
+        <button class="review-btn">Write a Review</button>
+    </div>
+
+</div>
+
+</body>
+</html>

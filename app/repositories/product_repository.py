@@ -1,6 +1,5 @@
 from models.product import Product
-from core.singleton import FileManager
-
+from core.file_singleton import FileManager
 
 class ProductRepository:
     def __init__(self):
@@ -12,7 +11,7 @@ class ProductRepository:
 
         for r in rows:
             product = Product(
-                int(r["id"]),
+                int(r["product_id"]),
                 r["name"],
                 r["category"],
                 float(r["price"]),

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> 
+    <title>Sign Up</title>
+</head>
+<body>
+
+<div class="container">
+    <h2>CREATE ACCOUNT</h2>
+    <p class="sub">GLOWING</p>
+
+    <form action="{{ url_for('auth.register') }}" method="POST">
+        
+        <label>Full Name</label>
+        <input type="text" name="fullname" placeholder="Full Name" required>
+
+        <label>Email Address</label>
+        <input type="email" name="email" placeholder="Email" required>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Password" required>
+
+        <label>Confirm Password</label>
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+        <button type="submit" class="btn">REGISTER</button>
+        
+        <p class="switch">Already have an account? <a href="{{ url_for('auth.login') }}">Sign in</a></p>
+    </form>
+</div>
+
+</body>
+</html>

@@ -13,12 +13,12 @@
         <nav>
             <a href="/">HOME</a> 
         </nav>
-        </header>
+    </header>
 
     <main class="checkout-page-content">
         <div class="main-title">Checkout</div>
 
-        <form class="checkout-layout" action="/checkout/{{ user_id }}" method="POST">
+        <form class="checkout-layout" action="{{ url_for('checkout.process_checkout') }}" method="POST">
 
             <div class="checkout-form-section">
 
@@ -63,11 +63,14 @@
                         <input type="text" id="card_number" name="card_number" placeholder="Card Number 1234 5678 9012 3456" class="text-input full-width">
                         
                         <div class="card-inputs-row">
-                            <label for="expiry_date" class="form-label">Expiry Date MM/YY</label>
-                            <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" class="text-input">
-                            
-                            <label for="cvv" class="form-label">CVV</label>
-                            <input type="text" id="cvv" name="cvv" placeholder="123" class="text-input">
+                            <div>
+                                <label for="expiry_date" class="form-label">Expiry Date</label>
+                                <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" class="text-input">
+                            </div>
+                            <div>
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input type="text" id="cvv" name="cvv" placeholder="123" class="text-input">
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -77,30 +80,20 @@
             <aside class="order-summary-section">
                 <h2>Order Summary</h2>
                 
-                <div class="summary-items">
-                    {% for item in items %}
-                    <div class="summary-item">
-                        <span class="item-name">{{ item.name }}</span>
-                        <span class="item-quantity">x{{ item.quantity }}</span>
-                        <span class="item-price">${{ "%.2f"|format(item.price * item.quantity) }}</span>
-                    </div>
-                    {% endfor %}
-                </div>
-
                 <div class="summary-details">
                     <div class="detail-row">
                         <span>Subtotal</span>
-                        <span>{{ "%.2f"|format(subtotal|default(0)) }}EGP</span>
+                        <span>{{ "%.2f"|format(subtotal|default(0)) }} EGP</span>
                     </div>
                     <div class="detail-row">
                         <span>Shipping</span>
                         <span>
                             {% if shipping_fee is defined and shipping_fee == 0 %}
-                                0.00EGP
+                                0.00 EGP
                             {% elif shipping_fee is defined %}
-                                ${{ "%.2f"|format(shipping_fee) }}
+                                {{ "%.2f"|format(shipping_fee) }} EGP
                             {% else %}
-                                TBD
+                                0.00 EGP
                             {% endif %}
                         </span>
                     </div>
@@ -108,8 +101,9 @@
 
                 <div class="total-row">
                     <h3>Total</h3>
-                    <h3 class="total-price">{{ "%.2f"|format(total|default(0)) }}EGP</h3>
+                    <h3 class="total-price">{{ "%.2f"|format(total|default(0)) }} EGP</h3>
                 </div>
+                
                 <button type="submit" class="place-order-button">Place Order</button>
             </aside>
 
@@ -126,16 +120,25 @@
             const codOption = document.querySelector('.cod-option');
 
             function updatePaymentSelection() {
-                cardOption.classList.toggle('selected', cardRadio.checked);
-                codOption.classList.toggle('selected', codRadio.checked);
-                cardDetails.style.display = cardRadio.checked ? 'block' : 'none';
+                if(cardRadio.checked) {
+                    cardOption.classList.add('selected');
+                    codOption.classList.remove('selected');
+                    cardDetails.style.display = 'block';
+                } else {
+                    cardOption.classList.remove('selected');
+                    codOption.classList.add('selected');
+                    cardDetails.style.display = 'none';
+                }
+
                 const cardInputs = cardDetails.querySelectorAll('input');
                 cardInputs.forEach(input => {
                     input.required = cardRadio.checked;
                 });
             }
+
             cardRadio.addEventListener('change', updatePaymentSelection);
             codRadio.addEventListener('change', updatePaymentSelection);
+            
             updatePaymentSelection(); 
         });
     </script>

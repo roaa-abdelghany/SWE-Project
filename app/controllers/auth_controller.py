@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, session, url_for, flash
 from repositories.user_repository import UserRepository
 from models.user import User 
 
@@ -34,8 +34,10 @@ def login():
         user = UserRepository.find_user_by_email_and_password(email, password)
 
         if user:
+            session['user_id'] = user.email
+            session['fullname'] = user.fullname
             flash(f"Welcome, {user.fullname}!", "success")
-            return redirect(url_for("cart.cart_page"))  # example redirect
+            return redirect(url_for("home"))
         else:
             flash("Invalid email or password!", "error")
             return redirect(url_for("auth.login"))

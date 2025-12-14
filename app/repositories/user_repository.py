@@ -2,7 +2,7 @@ import csv
 import os
 from models.user import User
 
-USERS_FILE = "users.csv"
+USERS_FILE = "Users.csv"
 
 class UserRepository:
     @staticmethod
