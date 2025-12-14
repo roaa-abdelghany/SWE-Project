@@ -3,113 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - GLOWING</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Shopping Cart</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='cart.css') }}">
 </head>
-
 <body>
 
-    <div class="top-banner">
+<header>
+    <div class="logo">GLOWING</div>
+    <nav>
+        <a href="/">HOME</a>
+    </nav>
+    <div class="header-icons">
+        <i class="far fa-heart"></i>
+        <a href="/orders" class="orders-icon-link">
+            <i class="fas fa-clipboard-list"></i>
+        </a>
+        <a href="/cart" class="cart-icon-link">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">{{ cart_items|length }}</span>
+        </a>
+        <a href="/customer" class="customer-link">
+            <i class="fas fa-user"></i>
+            Customer
+        </a>
     </div>
-    <header class="main-nav">
-        <div class="logo">GLOWING</div>
+</header>
 
-        <nav class="links">
-            <a href="/">HOME</a>
-            <a href="/products">SHOP</a>
-        </nav>
-
-        <div class="icons">
-            <i class="far fa-heart"></i>
-
-            <div class="cart-icon">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count">{{ cart_items|length }}</span>
-            </div>
-
-            <a href="#" class="customer-link">Customer <i class="fas fa-arrow-right"></i></a>
-        </div>
-    </header>
-
+<div class="main-content">
+    <h2 class="shopping-cart-title">SHOPPING CART</h2>
+    
     <div class="container">
-
-        <h1>SHOPPING CART</h1>
-
-        <div class="cart-layout">
-
-            <div class="products-section">
-
-                {% for item in cart_items %}
+        <div class="cart-items">
+            
+            {% for item in cart_items %}
                 <div class="cart-item">
+                    
+                    <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}" class="product-image">
+                    
+                    <div class="cart-item-info">
+                        <h3>{{ item.name }}</h3>
+                        <p class="category">{{ item.category | default('SKINCARE') }}</p> 
+                        <p class="description">{{ item.description }}</p>
 
-                    <div class="item-image">
-                        <img src="{{ url_for('static', filename='images/' ~ item.image) }}" alt="">
-                    </div>
+                        <div class="quantity-price-row">
+                            <div class="quantity-selector">
+                                
+                                <form method="POST" class="qty-form" action="{{ url_for('cart.cart_page') }}">
+                                    <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                                    <input type="hidden" name="action" value="decrease">
+                                    <button type="submit" class="qty-btn" {% if item.quantity == 1 %}disabled{% endif %}>-</button>
+                                </form>
 
-                    <div class="item-details">
-                        <h3 class="item-name">{{ item.name }}</h3>
-                        <p class="item-category">{{ item.category|upper }}</p>
-                        <p class="item-description">{{ item.description }}</p>
-
-                        <div class="quantity-control">
-                            <form method="POST" action="/cart/update/{{ item.product_id }}">
-                                <button name="action" value="decrease">−</button>
-                                <input type="text" value="{{ item.quantity }}" readonly>
-                                <button name="action" value="increase">+</button>
-                            </form>
+                                <span class="quantity-display">{{ item.quantity }}</span>
+                                
+                                <form method="POST" class="qty-form" action="{{ url_for('cart.cart_page') }}">
+                                    <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                                    <input type="hidden" name="action" value="increase">
+                                    <button type="submit" class="qty-btn" {% if item.quantity >= item.stock %}disabled{% endif %}>+</button>
+                                </form>
+                                
+                            </div>
+                            <div class="item-price">
+                                {{ '%.2f'|format(item.item_total) }} EGP
+                            </div>
                         </div>
                     </div>
 
-                    <div class="item-actions">
-                        <span class="item-price">${{ "%.2f"|format(item.price) }}</span>
-
-                        <form method="POST" action="/cart/delete/{{ item.product_id }}">
-                            <button class="delete-btn">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </form>
-                    </div>
-
+                    <form method="POST" class="delete-form" action="{{ url_for('cart.cart_page') }}">
+                        <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                        <input type="hidden" name="action" value="delete">
+                        <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                    </form>
                 </div>
-                {% endfor %}
-
-                {% if cart_items|length == 0 %}
-                <p class="empty-cart">Your cart is empty</p>
-                {% endif %}
-
-            </div>
-
-            <div class="summary-section">
-
-                <div class="summary-box">
-
-                    <h2>ORDER SUMMARY</h2>
-
-                    <div class="summary-line">
-                        <span>Subtotal ({{ cart_items|length }} items)</span>
-                        <span>{{ "%.2f"|format(subtotal) }}</span>
-                    </div>
-
-                    <div class="summary-line total-line">
-                        <span>Total</span>
-                        <span>{{ "%.2f"|format(total) }}</span>
-                    </div>
-
-                    <a href="/checkout">
-                        <button class="btn btn-checkout">PROCEED TO CHECKOUT</button>
-                    </a>
-
-                    
-                    <a href="/" class="btn btn-continue-shopping">CONTINUE SHOPPING</a>
-
-                </div>
-
-            </div>
-
+            {% endfor %}
+            
+            {% if not cart_items %}
+                <p class="empty-cart-message">Your cart is currently empty. <a href="/">Start shopping!</a></p>
+            {% endif %}
         </div>
 
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            
+            <div class="summary-line">
+                <span>Subtotal ({{ total_quantity }} items)</span>
+                <span>{{ '%.2f'|format(subtotal) }} EGP</span>
+            </div>
+            
+            <div class="summary-line total-line">
+                <span>Total</span>
+                <span>{{ '%.2f'|format(total_amount) }} EGP</span>
+            </div>
+
+            <a href="/checkout" class="checkout-link">
+                <button class="checkout-btn" {% if not cart_items %}disabled{% endif %}>PROCEED TO CHECKOUT</button>
+            </a>
+            <a href="/" class="continue-link">
+                <button class="continue-btn">CONTINUE SHOPPING</button>
+            </a>
+            
+            <div class="shipping-info">
+                <div class="info-item">
+                    <i class="fas fa-truck"></i> Free shipping on orders over 500 EGP
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-undo"></i> 30-day return policy
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-lock"></i> Secure checkout
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
+<div class="help-button">
+    <i class="fas fa-question-circle"></i>
+</div>
 
 </body>
 </html>
