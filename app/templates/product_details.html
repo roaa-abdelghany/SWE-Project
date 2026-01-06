@@ -17,7 +17,9 @@
         <a href="{{ url_for('home') }}">HOME</a>
     </nav>
     <div class="header-icons">
-        <i class="far fa-heart"></i> 
+        <a href="{{ url_for('favorite.favorites') }}" style="color: inherit; text-decoration: none;">
+            <i class="far fa-heart"></i> 
+        </a>
         
         <a href="{{ url_for('cart.cart_page', user_id=1) }}" class="cart-icon-link">
             <i class="fas fa-shopping-cart"></i>
@@ -31,33 +33,44 @@
     </div>
 </header>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages" style="padding: 10px 50px;">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" style="padding: 10px; margin-bottom: 10px; border-radius: 5px; background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc;">
+            {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
 <div class="main-content-container">
 
     <div class="product-container">
 
         <div class="left">
-
             <img src="{{ url_for('static', filename='images/' + product.image) }}"
-                     alt="{{ product.name }}"
-                     class="product-image">
+                 alt="{{ product.name }}"
+                 class="product-image">
         </div>
 
         <div class="right">
             <h2 class="name">{{ product.name }}</h2>
 
             <div class="rating">
-                {% set full_stars = product.rank | round | int %}
+                {% set full_stars = product.rank | default(0) | round | int %}
                 {% for i in range(full_stars) %}
-                    <i class="fas fa-star full-star"></i>
+                    <i class="fas fa-star full-star" style="color: #f39c12;"></i>
                 {% endfor %}
                 {% for i in range(5 - full_stars) %}
-                    <i class="far fa-star empty-star"></i>
+                    <i class="far fa-star empty-star" style="color: #ccc;"></i>
                 {% endfor %}
                 
-                <span class="rank">{{ product.rank }} (0 reviews)</span>
+                <span class="rank">{{ product.rank | default('0.0') }} (0 reviews)</span>
             </div>
 
-            <h3 class="price">{{ '%.2f'|format(product.price) }} EGP</h3>
+            <h3 class="price">{{ '%.2f'|format(product.price | float) }} EGP</h3>
 
             <p class="desc">{{ product.description }}</p>
 
@@ -69,7 +82,7 @@
             <label for="qty-input" class="qty-label">Quantity</label>
             
             <div class="quantity-box">
-                <button type="button" class="qty-control-btn minus-btn" data-input-id="qty-input">-</button>
+                <button type="button" class="qty-control-btn minus-btn">-</button>
                 <input type="number" 
                        id="qty-input"
                        name="quantity" 
@@ -78,59 +91,28 @@
                        max="{{ product.stock }}"
                        class="qty-input-main"
                        readonly>
-                <button type="button" class="qty-control-btn plus-btn" data-input-id="qty-input">+</button> 
+                <button type="button" class="qty-control-btn plus-btn">+</button> 
             </div>
 
-            <div class="product-actions-buttons">
-                <form action="{{ url_for('cart.add_to_cart') }}" method="POST" class="add-to-cart-form">
+            <div class="product-actions-buttons" style="display: flex; gap: 10px; align-items: center; margin-top: 20px;">
+                
+                <form action="{{ url_for('cart.add_to_cart') }}" method="POST" class="add-to-cart-form" style="margin: 0;">
                     <input type="hidden" name="user_id" value="1">
                     <input type="hidden" name="product_id" value="{{ product.id }}">
                     <input type="hidden" name="quantity" id="form-qty-input" value="1">
                     
-                    <button class="add-btn" type="submit">
+                    <button class="add-btn" type="submit" style="white-space: nowrap; background-color: #333; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
                         <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
                 </form>
 
-                <button class="fav-btn"><i class="far fa-heart"></i> Add to Wishlist</button>
+                <form action="{{ url_for('favorite.add_favorite', product_id=product.id) }}" method="POST" style="margin: 0;">
+                    <button class="fav-btn" type="submit" style="white-space: nowrap; background: transparent; border: 1px solid #333; padding: 10px 15px; cursor: pointer; border-radius: 5px;">
+                        <i class="far fa-heart"></i> Add to Wishlist
+                    </button>
+                </form>
+
             </div>
-            <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const plusButtons = document.querySelectorAll('.plus-btn');
-        const minusButtons = document.querySelectorAll('.minus-btn');
-        const mainQtyInput = document.getElementById('qty-input');
-        const formQtyInput = document.getElementById('form-qty-input');
-
-        function updateQuantity(delta) {
-            let currentValue = mainQtyInput.valueAsNumber || Number(mainQtyInput.value);
-            const max = Number(mainQtyInput.max);
-            const min = Number(mainQtyInput.min);
-
-            let newValue = currentValue + delta;
-
-            if (newValue >= min && newValue <= max) {
-                mainQtyInput.value = newValue;
-                formQtyInput.value = newValue; 
-            }
-        }
-        
-        plusButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                updateQuantity(1);
-            });
-        });
-
-        minusButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                updateQuantity(-1);
-            });
-        });
-
-        if (formQtyInput) {
-            formQtyInput.value = mainQtyInput.value;
-        }
-    });
-</script>
 
         </div>
 
@@ -143,6 +125,28 @@
     </div>
 
 </div>
+<script>
+    const minusBtn = document.querySelector('.minus-btn');
+    const plusBtn = document.querySelector('.plus-btn');
+    const qtyInput = document.getElementById('qty-input');
+    const formQtyInput = document.getElementById('form-qty-input');
+    const maxStock = parseInt(qtyInput.getAttribute('max'));
+
+    minusBtn.addEventListener('click', () => {
+        let currentQty = parseInt(qtyInput.value);
+        if (currentQty > 1) {
+            qtyInput.value = currentQty - 1;
+            formQtyInput.value = qtyInput.value;
+        }
+    });
+
+    plusBtn.addEventListener('click', () => {
+        let currentQty = parseInt(qtyInput.value);
+        if (currentQty < maxStock) {
+            qtyInput.value = currentQty + 1;
+            formQtyInput.value = qtyInput.value;
+        }
+    });
 
 </body>
 </html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_login.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+</head>
+<body>
+
+<div class="overlay"></div>
+
+<div class="login-card">
+    <div class="header">
+        <h2>Admin Access</h2>
+        <p>Secure Dashboard Login</p>
+    </div>
+
+    <div class="warning">
+        🔒 This area is restricted to authorized administrators only
+    </div>
+
+    <form method="POST">
+        <label>Admin Email</label>
+        <input type="email" name="email" placeholder="admin@cosmetics.com" required>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="••••••••" required>
+
+        <button type="submit">Access Dashboard</button>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="msg {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+</div>
+
+</body>
+</html>

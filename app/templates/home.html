@@ -2,38 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLOWING - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: sans-serif; text-align: center; padding-top: 50px; }
-        h1 { color: #385e49; margin-bottom: 30px; }
-        .links a { 
-            display: block; 
-            width: 300px;
-            margin: 10px auto; 
-            padding: 15px 20px; 
-            background: #f7fffb; 
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; padding: 0; margin: 0; background-color: #f7fffb; }
+        .navbar { background-color: #385e49; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; position: sticky; top: 0; }
+        .navbar a { color: white; text-decoration: none; font-size: 0.9rem; font-weight: bold; }
+        h1 { color: #385e49; margin-top: 40px; }
+        .links-container { display: flex; flex-direction: column; align-items: center; padding: 20px 0 60px; }
+        
+        /* أزرار المنتجات */
+        .product-item { 
+            display: flex; 
+            justify-content: space-between;
+            width: 380px;
+            margin: 8px 0; 
+            padding: 18px 25px; 
+            background: white; 
             border: 2px solid #385e49; 
             color: #385e49; 
             text-decoration: none; 
-            border-radius: 5px;
-            transition: background 0.3s;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.3s;
         }
-        .links a:hover {
+
+        .product-item:hover {
             background: #385e49;
             color: white;
+            transform: translateX(5px);
         }
+
+        .price-tag { font-size: 0.85rem; opacity: 0.8; }
+        .footer-btns { margin-top: 40px; display: flex; flex-direction: column; gap: 10px; }
+        .btn-action { width: 380px; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; display: block; }
+        .cart-btn { background: #ffd700; color: #333; }
+        .checkout-btn { background: #385e49; color: white; }
     </style>
 </head>
 <body>
-    <h1>Welcome to GLOWING</h1>
-    <div class="links">
-        <h2>Demo Products:</h2>
-         <li><a href="/product/1">Product 1</a></li>
-        <li><a href="/product/2">Product 2</a></li>
-        <li><a href="/product/3">Product 3</a></li>
-        <a href="/cart">Shopping Cart</a>
-        <a href="/checkout">Checkout</a>
 
+    <nav class="navbar">
+    <div class="logo"><strong>GLOWING</strong></div>
+    <div class="nav-right">
+        <a href="{{ url_for('orders.show_my_orders') }}" style="margin-right: 20px;">
+            <i class="fas fa-box"></i> My Orders
+        </a>
+        <a href="{{ url_for('favorite.favorites') }}" style="margin-right: 20px;">
+            <i class="fas fa-heart"></i> My Favorites
+        </a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
+</nav>
+
+    <h1>Beauty Collection</h1>
+    
+    <div class="links-container">
+        <h2><i class="fas fa-magic"></i> Our Products:</h2>
+        
+        {% for product in products %}
+        <a href="{{ url_for('product.product_details', id=product.id) }}" class="product-item">
+            <span><i class="fas fa-leaf"></i> {{ product.name }}</span>
+            <span class="price-tag">{{ product.price }} EGP</span>
+        </a>
+        {% endfor %}
+
+        <div class="footer-btns">
+            <h2>Shopping:</h2>
+            <a href="/cart/" class="btn-action cart-btn">View My Cart</a>
+            <a href="/checkout" class="btn-action checkout-btn">Proceed to Checkout</a>
+        </div>
+    </div>
+
 </body>
 </html>

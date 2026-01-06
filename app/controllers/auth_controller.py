@@ -27,6 +27,7 @@ def register():
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
+
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
@@ -36,7 +37,6 @@ def login():
         if user:
             session['user_id'] = user.email
             session['fullname'] = user.fullname
-            flash(f"Welcome, {user.fullname}!", "success")
             return redirect(url_for("home"))
         else:
             flash("Invalid email or password!", "error")

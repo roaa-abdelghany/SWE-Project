@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GLOWING - Welcome</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 100px; background-color: #f7fffb; }
+        h1 { color: #385e49; margin-bottom: 10px; }
+        p { color: #666; margin-bottom: 40px; }
+        .links a { 
+            display: block; 
+            width: 300px;
+            margin: 15px auto; 
+            padding: 15px 20px; 
+            background: white; 
+            border: 2px solid #385e49; 
+            color: #385e49; 
+            text-decoration: none; 
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .links a:hover { background: #385e49; color: white; }
+        .admin-link { margin-top: 50px !important; border-style: dashed !important; opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to GLOWING</h1>
+    <p>Please login or register to start shopping</p>
+    
+    <div class="links">
+        <a href="{{ url_for('auth.login') }}"><i class="fas fa-sign-in-alt"></i> User Login</a>
+        <a href="{{ url_for('auth.register') }}"><i class="fas fa-user-plus"></i> Create New Account</a>
+        
+        <a href="{{ url_for('admin.admin_login') }}" class="admin-link">
+            <i class="fas fa-user-shield"></i> Admin Portal
+        </a>
+    </div>
+</body>
+</html>

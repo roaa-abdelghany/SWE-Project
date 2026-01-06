@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites - GLOWING</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="shipping-banner">
+        Free shipping on all U.S. orders $50+
+    </header>
+
+    <nav class="navbar">
+        <div class="logo">GLOWING</div>
+        <div class="nav-links">
+            <a href="/">HOME</a>
+            <a href="/product">SHOP</a>
+        </div>
+        <div class="nav-icons">
+            <div class="cart-icon">
+                <span>🛒</span>
+                {% if cart_count | default(0) > 0 %}
+                <span class="cart-badge">{{ cart_count }}</span>
+                {% endif %}
+            </div>
+            <div class="user-profile">👤 Customer</div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="header-section">
+            <h1>My Favorites</h1>
+            <p class="product-count">{{ favorites|length }} saved product(s)</p>
+        </section>
+
+        <div class="product-grid">
+            {% for product in favorites %}
+            <div class="product-card">
+                <div class="image-wrapper">
+                    <span class="category-label">{{ product.category }}</span>
+                    
+                    <a href="{{ url_for('favorite.remove_favorite', product_id=product.product_id) }}" class="btn-remove" title="Remove from favorites">
+                        <span class="trash-icon">🗑</span>
+                    </a>
+
+                    <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}">
+                </div>
+
+                <div class="info-wrapper">
+                    <h3 class="product-name">{{ product.name }}</h3>
+                    <p class="product-desc">{{ product.description }}</p>
+                    
+                    <div class="price-rating-row">
+                        <span class="price">${{ "{:.2f}".format(product.price|float) }}</span>
+                        <span class="rating">
+                            <span class="star">★</span> {{ product.rank }}
+                        </span>
+                    </div>
+
+                    <p class="stock-status">{{ product.stock }} in stock</p>
+
+                    <div class="card-actions">
+                        <a href="{{ url_for('product.product_details', id=product.product_id) }}" class="btn-view">View</a>
+                        
+                        <form action="{{ url_for('cart.add_to_cart') }}" method="POST">
+                            <input type="hidden" name="product_id" value="{{ product.product_id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn-add-cart">🛒 Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-favorites">
+                <p>You haven't saved any favorites yet.</p>
+                <a href="/" class="btn-secondary">Start Shopping</a>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+</body>
+</html>

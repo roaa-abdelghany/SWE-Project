@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | GLOWING</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_product.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="sidebar">
+            <div class="logo">GLOWING</div>
+            <nav>
+                <a href="#" class="active"><i class="fas fa-box"></i> Products</a>
+                <a href="#orders"><i class="fas fa-shopping-cart"></i> Orders</a>
+            </nav>
+            <div class="admin-info">
+                <p><i class="fas fa-user-shield"></i> Admin Panel</p>
+                <a href="/logout" class="logout-link">Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h2>Product Management</h2>
+                <button class="btn-add" onclick="toggleForm()">+ Add New Product</button>
+            </header>
+
+            <div id="addForm" class="form-container">
+                <form action="{{ url_for('admin_panel.add_product') }}" method="POST">
+                    <input name="name" placeholder="Product Name" required>
+                    <input name="category" placeholder="Category" required>
+                    <input name="price" type="number" step="0.01" placeholder="Price" required>
+                    <input name="stock" type="number" placeholder="Stock" required>
+                    <button type="submit" class="btn-save">Save Product</button>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in products %}
+                        <tr>
+                            <td>{{ p.name }}</td>
+                            <td><span class="tag">{{ p.category }}</span></td>
+                            <td>EGP {{ p.price }}</td>
+                            <td>{{ p.stock }}</td>
+                            <td>
+                                <a href="{{ url_for('admin_panel.delete_product', product_id=p['id']) }}" 
+                                class="btn-delete" 
+                                onclick="return confirm('Are you sure?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <header class="content-header" id="orders" style="margin-top: 50px;">
+                <h2>Recent Orders</h2>
+            </header>
+            <div class="table-card">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for o in orders %}
+                        <tr>
+                            <td>#{{ o.id }}</td>
+                            <td>{{ o.date }}</td>
+                            <td><span class="status {{ o.status.lower() }}">{{ o.status }}</span></td>
+                            <td>EGP {{ o.total }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleForm() {
+            var form = document.getElementById('addForm');
+            form.style.display = (form.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>

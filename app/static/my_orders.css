@@ -1,0 +1,53 @@
+:root {
+    --main-pink: #f8edeb;
+    --gold: #d4a373;
+    --text-gray: #555;
+}
+
+body {
+    background-color: #fafafa;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+header h1 {
+    color: var(--gold);
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.orders-table th {
+    background-color: var(--main-pink);
+    padding: 20px;
+    text-align: left;
+}
+
+.orders-table td {
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.status.delivered { background-color: #d1e7dd; color: #0f5132; }
+.status.shipped { background-color: #cfe2ff; color: #084298; }
+.status.processing { background-color: #fff3cd; color: #856404; }
